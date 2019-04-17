@@ -428,6 +428,7 @@ void Other_GPIO_Init(void)
 	__HAL_RCC_GPIOG_CLK_ENABLE(); 
 	__HAL_RCC_GPIOC_CLK_ENABLE();  
 	__HAL_RCC_GPIOD_CLK_ENABLE();
+	__HAL_RCC_GPIOE_CLK_ENABLE();
 	__HAL_RCC_DMA2_CLK_ENABLE();
 	__HAL_RCC_GPIOF_CLK_ENABLE();
 	
@@ -449,15 +450,22 @@ void Other_GPIO_Init(void)
 	
 	//LED
 	GPIO_InitStruct.Pin =GPIO_PIN_8|GPIO_PIN_9; 
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 	
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_9,GPIO_PIN_SET);	
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_SET);	
 	
 	//LED
 	GPIO_InitStruct.Pin =GPIO_PIN_6; //tec_en
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+  	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOF,GPIO_PIN_6,GPIO_PIN_SET);	
+
+  	//power_en
+	GPIO_InitStruct.Pin =GPIO_PIN_1;
+  	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(GPIOE,GPIO_PIN_1,GPIO_PIN_SET);	
+
+	
 	//MCO
 	GPIO_InitStruct.Pin       = GPIO_PIN_8;
   GPIO_InitStruct.Mode      = GPIO_MODE_OUTPUT_PP; 
@@ -731,6 +739,8 @@ uint8_t IR_CAMERA_Init(uint32_t Resolution)
 
   return status;
 }
+
+
 
 
 void Board_Init(void)

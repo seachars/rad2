@@ -944,11 +944,11 @@ ARM Macro Assembler    Page 15
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.sp --apcs=
 interwork --depend=.\stm32_12090\startup_stm32f769xx.d -o.\stm32_12090\startup_
-stm32f769xx.o -I.\RTE\_STM32_12090 -ID:\KEIL5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Co
-re\Include -ID:\KEIL5\ARM\PACK\Keil\STM32F7xx_DFP\2.11.0\Drivers\CMSIS\Device\S
-T\STM32F7xx\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERS
-ION SETA 526" --predefine="_RTE_ SETA 1" --predefine="STM32F746xx SETA 1" --lis
-t=startup_stm32f769xx.lst startup_stm32f769xx.s
+stm32f769xx.o -I.\RTE\_STM32_12090 -ID:\0-winInatall\Keil_v5\ARM\PACK\ARM\CMSIS
+\5.2.0\CMSIS\Include -ID:\0-winInatall\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.11
+.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include --predefine="__MICROLIB SETA 1" --
+predefine="__UVISION_VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="
+STM32F746xx SETA 1" --list=startup_stm32f769xx.lst startup_stm32f769xx.s
 
 
 

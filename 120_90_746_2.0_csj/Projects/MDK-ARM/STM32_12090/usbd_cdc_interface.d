@@ -7,7 +7,7 @@
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f746xx.h
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Include/core_cm7.h
-.\stm32_12090\usbd_cdc_interface.o: D:\KEIL5\ARM\ARMCC\Bin\..\include\stdint.h
+.\stm32_12090\usbd_cdc_interface.o: D:\0-winInatall\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Include/core_cmInstr.h
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Include/cmsis_armcc.h
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Include/core_cmFunc.h
@@ -15,7 +15,7 @@
 .\stm32_12090\usbd_cdc_interface.o: ../../Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h
 .\stm32_12090\usbd_cdc_interface.o: ../Inc/stm32f7xx_hal_conf.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Drivers\STM32F7xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h
-.\stm32_12090\usbd_cdc_interface.o: D:\KEIL5\ARM\ARMCC\Bin\..\include\stdio.h
+.\stm32_12090\usbd_cdc_interface.o: D:\0-winInatall\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rcc_ex.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_gpio.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_gpio_ex.h
@@ -47,8 +47,8 @@
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pcd_ex.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h
 .\stm32_12090\usbd_cdc_interface.o: ../Inc/usbd_conf.h
-.\stm32_12090\usbd_cdc_interface.o: D:\KEIL5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\stm32_12090\usbd_cdc_interface.o: D:\KEIL5\ARM\ARMCC\Bin\..\include\string.h
+.\stm32_12090\usbd_cdc_interface.o: D:\0-winInatall\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\stm32_12090\usbd_cdc_interface.o: D:\0-winInatall\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h
 .\stm32_12090\usbd_cdc_interface.o: ..\..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h

@@ -18,6 +18,33 @@
 #include "SPI.h"
 #include "I2C.h"
 
+#define LCD_ADDR_BASE 				0x6C000000
+#define LCD_COMMAND_ADDR			(LCD_ADDR_BASE+0x0)
+#define LCD_DATA_ADDR				(LCD_ADDR_BASE+0x1)
+#define LCD_COMMAND_COMMENT			(0x44)
+
+#define LCD_WIDTH 	320
+#define LCD_HEIGHT 	240
+#define LCD_PIXELs 	(LCD_WIDTH*LCD_HEIGHT)
+
+
+void test_color(uint32_t r,uint32_t g,uint32_t b)
+{
+	uint32_t  * p;
+	int i;
+	uint32_t  color;
+	p = (uint32_t  *)LCD_COMMAND_ADDR;
+	*p=LCD_COMMAND_COMMENT;
+	p = (uint32_t  *)LCD_DATA_ADDR;
+	
+	color=((r>>3)<<11)|((g>>2)<<5)|((b>>3)<<0);
+
+	for(i=0;i<LCD_PIXELs;i++)
+		{
+			*p++=color;
+		}
+	
+}
 
 int main(void)
 {
@@ -26,9 +53,18 @@ int main(void)
 	
 	Image_Parameter120.shutter_id=SEL_LOOP;	
 	//在id为0时再响应其他非零值，避免状态机不能跳出
+	uint32_t r=0x3f;
+	uint32_t g=0x5f;
+	uint32_t b=0x7f;
+
+  while(1)
+  	{
+  		test_color(r,g,b);
+  	}
 
   while (1)
-  {	
+  {
+  		
 		if(Image_Parameter120.Image_Ready==1) //保证一帧数据的完整性
 		{			
 			 //闭环状态机

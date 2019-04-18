@@ -1,4 +1,6 @@
 #include "hw_init.h"
+#include "stm32f7xx_hal.h"
+
 #include "Camera.h"
 #include "Varible.h"
 #include "gd_app.h"
@@ -463,7 +465,12 @@ void Other_GPIO_Init(void)
   	//power_en
 	GPIO_InitStruct.Pin =GPIO_PIN_1;
   	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(GPIOE,GPIO_PIN_1,GPIO_PIN_SET);	
+	HAL_GPIO_WritePin(GPIOE,GPIO_PIN_1,GPIO_PIN_SET);
+
+  	//brightness_en
+	GPIO_InitStruct.Pin =GPIO_PIN_5;
+  	HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_5,GPIO_PIN_SET);	
 
 	
 	//MCO
@@ -740,7 +747,49 @@ uint8_t IR_CAMERA_Init(uint32_t Resolution)
   return status;
 }
 
+SRAM_HandleTypeDef hsram1;
 
+/* FMC initialization function */
+static void MX_FMC_Init(void)
+{
+  FMC_NORSRAM_TimingTypeDef Timing;
+
+  /** Perform the SRAM1 memory initialization sequence
+  */
+  hsram1.Instance = FMC_NORSRAM_DEVICE;
+  hsram1.Extended = FMC_NORSRAM_EXTENDED_DEVICE;
+  /* hsram1.Init */
+  hsram1.Init.NSBank = FMC_NORSRAM_BANK4;
+  hsram1.Init.DataAddressMux = FMC_DATA_ADDRESS_MUX_DISABLE;
+  hsram1.Init.MemoryType = FMC_MEMORY_TYPE_SRAM;
+  hsram1.Init.MemoryDataWidth = FMC_NORSRAM_MEM_BUS_WIDTH_16;
+  hsram1.Init.BurstAccessMode = FMC_BURST_ACCESS_MODE_DISABLE;
+  hsram1.Init.WaitSignalPolarity = FMC_WAIT_SIGNAL_POLARITY_LOW;
+  hsram1.Init.WaitSignalActive = FMC_WAIT_TIMING_BEFORE_WS;
+  hsram1.Init.WriteOperation = FMC_WRITE_OPERATION_ENABLE;
+  hsram1.Init.WaitSignal = FMC_WAIT_SIGNAL_DISABLE;
+  hsram1.Init.ExtendedMode = FMC_EXTENDED_MODE_DISABLE;
+  hsram1.Init.AsynchronousWait = FMC_ASYNCHRONOUS_WAIT_DISABLE;
+  hsram1.Init.WriteBurst = FMC_WRITE_BURST_DISABLE;
+  hsram1.Init.ContinuousClock = FMC_CONTINUOUS_CLOCK_SYNC_ONLY;
+  hsram1.Init.WriteFifo = FMC_WRITE_FIFO_ENABLE;
+  hsram1.Init.PageSize = FMC_PAGE_SIZE_NONE;
+  /* Timing */
+  Timing.AddressSetupTime = 15;
+  Timing.AddressHoldTime = 15;
+  Timing.DataSetupTime = 255;
+  Timing.BusTurnAroundDuration = 15;
+  Timing.CLKDivision = 16;
+  Timing.DataLatency = 17;
+  Timing.AccessMode = FMC_ACCESS_MODE_A;
+  /* ExtTiming */
+
+  if (HAL_SRAM_Init(&hsram1, &Timing, NULL) != HAL_OK)
+  {
+   // _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
 
 
 void Board_Init(void)
@@ -774,4 +823,6 @@ void Board_Init(void)
 	BSP_CAMERA_Init(); //ok
 	
 	BSP_CAMERA_ContinuousStart(Image_Parameter120.temp_xdata);
+	
+	MX_FMC_Init();
 }

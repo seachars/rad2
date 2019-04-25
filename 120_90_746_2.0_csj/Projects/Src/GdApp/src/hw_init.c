@@ -6,6 +6,25 @@
 #include "gd_app.h"
 #include "GD_Flash.h"
 #include "Shutter.h"
+#include "cLCD.h"
+
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @param  file: The file name as string.
+  * @param  line: The line in file as a number.
+  * @retval None
+  */
+void _Error_Handler(char *file, int line)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  while(1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
 {
@@ -90,7 +109,7 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48SOURCE_PLLSAIP;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
-    //_Error_Handler(__FILE__, __LINE__);
+    _Error_Handler(__FILE__, __LINE__);
   }	
 }
 
@@ -776,20 +795,53 @@ static void MX_FMC_Init(void)
   hsram1.Init.PageSize = FMC_PAGE_SIZE_NONE;
   /* Timing */
   Timing.AddressSetupTime = 15;
-  Timing.AddressHoldTime = 15;
-  Timing.DataSetupTime = 255;
-  Timing.BusTurnAroundDuration = 15;
-  Timing.CLKDivision = 16;
-  Timing.DataLatency = 17;
+  Timing.AddressHoldTime = 0;
+  Timing.DataSetupTime = 15;
+  Timing.BusTurnAroundDuration = 0;
+  Timing.CLKDivision = 0;
+  Timing.DataLatency = 0;
   Timing.AccessMode = FMC_ACCESS_MODE_A;
   /* ExtTiming */
 
   if (HAL_SRAM_Init(&hsram1, &Timing, NULL) != HAL_OK)
   {
-   // _Error_Handler(__FILE__, __LINE__);
+	_Error_Handler(__FILE__, __LINE__);
   }
+  
 
 }
+
+
+
+
+
+void MPU_Config(void)
+{
+  MPU_Region_InitTypeDef MPU_InitStruct;
+  
+  /* Disable the MPU */
+  HAL_MPU_Disable();
+
+  /* Configure the MPU attributes as WT for SRAM */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress = (0X6C000000);
+  MPU_InitStruct.Size = MPU_REGION_SIZE_128KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* Enable the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+}
+
 
 
 void Board_Init(void)
@@ -825,4 +877,8 @@ void Board_Init(void)
 	BSP_CAMERA_ContinuousStart(Image_Parameter120.temp_xdata);
 	
 	MX_FMC_Init();
+	MPU_Config();
+	
+	LCD_Init();
+	
 }

@@ -660,6 +660,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\GdApp\src\ADS1115.c</FilePath>
             </File>
+            <File>
+              <FileName>cLCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\GdApp\src\cLCD.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -47,6 +47,7 @@
 ".\stm32_12090\uart_app.o"
 ".\stm32_12090\varible.o"
 ".\stm32_12090\ads1115.o"
+".\stm32_12090\clcd.o"
 "..\Src\GdApp\Sensor.lib"
 ".\stm32_12090\i2c.o"
 ".\stm32_12090\shutter.o"

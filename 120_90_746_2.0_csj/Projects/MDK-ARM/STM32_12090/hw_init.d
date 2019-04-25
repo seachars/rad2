@@ -66,3 +66,5 @@
 .\stm32_12090\hw_init.o: ..\Src\GdApp\include\gd_app.h
 .\stm32_12090\hw_init.o: ..\Src\GdApp\include\GD_Flash.h
 .\stm32_12090\hw_init.o: ..\Src\GdApp\include\Shutter.h
+.\stm32_12090\hw_init.o: ..\Src\GdApp\include\cLCD.h
+.\stm32_12090\hw_init.o: ..\Src\GdApp\include\cbase.h

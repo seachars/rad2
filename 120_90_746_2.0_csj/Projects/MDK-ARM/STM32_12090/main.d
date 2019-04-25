@@ -68,3 +68,5 @@
 .\stm32_12090\main.o: ..\Src\GdApp\include\Sensor_Control.h
 .\stm32_12090\main.o: ..\Src\GdApp\include\Shutter.h
 .\stm32_12090\main.o: ..\Src\GdApp\include\I2C.h
+.\stm32_12090\main.o: ..\Src\GdApp\include\cLCD.h
+.\stm32_12090\main.o: ..\Src\GdApp\include\cbase.h

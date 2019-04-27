@@ -9,6 +9,7 @@
 #include "Sensor.h"
 #include "Sensor_Control.h"
 #include "SPI.h"
+#include "cLCD.h"
 
 
 uint16_t VCP_DataTx(uint8_t* Buf, uint32_t Len,uint8_t Mode_flag)
@@ -270,6 +271,7 @@ void SendY8(void)
 
 void Send_Process(uint8_t mode)
 {
+	test_colorBar();
 	VCP_DataTx ( (uint8_t*)IMAGE_Head, 10,0); //֡ͷ
 	switch(mode)
 	{

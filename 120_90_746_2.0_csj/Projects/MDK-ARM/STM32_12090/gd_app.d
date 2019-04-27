@@ -66,3 +66,5 @@
 .\stm32_12090\gd_app.o: ..\Src\GdApp\include\uart_app.h
 .\stm32_12090\gd_app.o: ..\Src\GdApp\include\GD_Flash.h
 .\stm32_12090\gd_app.o: ..\Src\GdApp\include\Sensor_Control.h
+.\stm32_12090\gd_app.o: ..\Src\GdApp\include\cLCD.h
+.\stm32_12090\gd_app.o: ..\Src\GdApp\include\cbase.h

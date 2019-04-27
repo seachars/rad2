@@ -483,6 +483,9 @@ void Other_GPIO_Init(void)
 
   	//power_en
 	GPIO_InitStruct.Pin =GPIO_PIN_1;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOE,GPIO_PIN_1,GPIO_PIN_SET);
 
@@ -791,12 +794,12 @@ static void MX_FMC_Init(void)
   hsram1.Init.AsynchronousWait = FMC_ASYNCHRONOUS_WAIT_DISABLE;
   hsram1.Init.WriteBurst = FMC_WRITE_BURST_DISABLE;
   hsram1.Init.ContinuousClock = FMC_CONTINUOUS_CLOCK_SYNC_ONLY;
-  hsram1.Init.WriteFifo = FMC_WRITE_FIFO_ENABLE;
+  //hsram1.Init.WriteFifo = FMC_WRITE_FIFO_ENABLE;
   hsram1.Init.PageSize = FMC_PAGE_SIZE_NONE;
   /* Timing */
-  Timing.AddressSetupTime = 15;
+  Timing.AddressSetupTime = 5;
   Timing.AddressHoldTime = 0;
-  Timing.DataSetupTime = 15;
+  Timing.DataSetupTime = 9;
   Timing.BusTurnAroundDuration = 0;
   Timing.CLKDivision = 0;
   Timing.DataLatency = 0;
@@ -807,8 +810,6 @@ static void MX_FMC_Init(void)
   {
 	_Error_Handler(__FILE__, __LINE__);
   }
-  
-
 }
 
 
@@ -839,13 +840,13 @@ void MPU_Config(void)
 
   /* Enable the MPU */
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
-
 }
 
 
 
 void Board_Init(void)
 {
+	MPU_Config();
 	HAL_Init();
 	SystemClock_Config(); // ±÷”≥ı ºªØ
 	
@@ -877,8 +878,10 @@ void Board_Init(void)
 	BSP_CAMERA_ContinuousStart(Image_Parameter120.temp_xdata);
 	
 	MX_FMC_Init();
-	MPU_Config();
+	
 	
 	LCD_Init();
+	
+	LCD_Clear(0xff);
 	
 }

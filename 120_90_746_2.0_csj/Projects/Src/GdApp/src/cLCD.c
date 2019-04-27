@@ -276,40 +276,39 @@ int start_x_col=1;
 void test_colorBar(void)
 {
 	uint16_t  *p;
-	int y,x;
+	int i,j;
 	uint16_t  color;
 	uint32_t r=0,g=0,b=0;
-
+	int step;
 	int speed;
 	int x_col;
 	p = (uint16_t  *)LCD_COMMAND_ADDR;
 	*p=LCD_COMMAND_COMMENT;
 	p = (uint16_t  *)LCD_DATA_ADDR;
 	
+	step=1;
 	speed=4;
-	start_x_col+=speed;
-	if (start_x_col<300) start_x_col=0;
 
-	for(y=0;y<LCD_HEIGHT;y++)
+	for(i=0;i<LCD_HEIGHT;i++)
 		{
-		for (x=0;x<LCD_WIDTH;x++)
+		for (j=0;j<LCD_WIDTH;j++)
 			{
-			x_col=(x*speed);	
-			if ((x_col>=(0+start_x_col))&(x_col<(256+start_x_col)))
+			x_col=(j*speed);	
+			if ((x_col>=0)&(x_col<256))
 				{
 					r=x_col;
 					g=0;
 					b=0;
 				}
 			
-			else if ((x_col>=(256+start_x_col))&(x_col<(512+start_x_col)))
+			else if ((x_col>=255)&(x_col<512))
 				{
 					r=0;
 					g=x_col;
 					b=0;
 				}
 
-			else if ((x_col>=(512+start_x_col))&(x_col<(768+start_x_col)))
+			else if ((x_col>=512)&(x_col<768))
 				{
 					r=0;
 					g=0;
@@ -317,9 +316,9 @@ void test_colorBar(void)
 				}
 			else
 				{
-					r=0;
-					g=0;
-					b=0;
+					r=255;
+					g=255;
+					b=255;
 				}
 				
 			color=((r>>3)<<11)|((g>>2)<<5)|((b>>3)<<0);
@@ -330,6 +329,7 @@ void test_colorBar(void)
 		}
 	
 }
+
 
 uint16_t bitcolor=0;
 

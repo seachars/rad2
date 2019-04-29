@@ -251,6 +251,7 @@ void SendY16(void)
 	{
 		Image_Parameter120.Y16_LastData=(uint16_t*)malloc(COLUMN*ROW*2); //分配DMA接受缓冲器
 		memcpy((void*)Image_Parameter120.Y16_LastData,(void*)Image_Parameter120.Y16_Data,COLUMN*ROW*2);
+		
 	}
 	else
 		gdTimeFieldFilter((unsigned short*)Image_Parameter120.Y16_Data,Image_Parameter120.Y16_LastData, COLUMN, ROW,10);		
@@ -258,6 +259,7 @@ void SendY16(void)
 	gdSharpenImage(Image_Parameter120.Y16_LastData,(unsigned short*)Image_Parameter120.Y16_Data,COLUMN, ROW);	
 	#endif
 	
+	fill_screen(Image_Parameter120.Y16_Data,COLUMN,ROW);
 	VCP_DataTx((uint8_t*)(Image_Parameter120.Y16_Data),COLUMN*ROW*2,0);	
 }
 
@@ -271,7 +273,8 @@ void SendY8(void)
 
 void Send_Process(uint8_t mode)
 {
-	test_colorBar();
+	//test_colorBar();
+	
 	VCP_DataTx ( (uint8_t*)IMAGE_Head, 10,0); //帧头
 	switch(mode)
 	{

@@ -24,7 +24,7 @@ void delay_(__IO uint32_t nCount);
 
 
 void test_color(uint32_t r,uint32_t g,uint32_t b);
-void test_moveBar(void);
+void fill_screen(u16 *pData,int width,int height);
 
 
 #endif

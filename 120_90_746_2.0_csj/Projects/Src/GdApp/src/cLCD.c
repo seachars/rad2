@@ -271,7 +271,8 @@ void test_color(uint32_t r,uint32_t g,uint32_t b)
 	
 }
 
-int start_x_col=1;
+int start_x=0;
+int start_y=0;
 
 void test_colorBar(void)
 {
@@ -280,20 +281,25 @@ void test_colorBar(void)
 	uint16_t  color;
 	uint32_t r=0,g=0,b=0;
 	int step;
-	int speed;
+	int speed=4;
 	int x_col;
+	u16 *pdisp;
+
+	step=1;
+	start_x++;
+	if (start_x>200)
+		start_x=0;
+
 	p = (uint16_t  *)LCD_COMMAND_ADDR;
 	*p=LCD_COMMAND_COMMENT;
 	p = (uint16_t  *)LCD_DATA_ADDR;
-	
-	step=1;
-	speed=4;
 
+#if 1
 	for(i=0;i<LCD_HEIGHT;i++)
 		{
 		for (j=0;j<LCD_WIDTH;j++)
 			{
-			x_col=(j*speed);	
+			x_col=(i*speed)+start_x;	
 			if ((x_col>=0)&(x_col<256))
 				{
 					r=x_col;
@@ -301,7 +307,7 @@ void test_colorBar(void)
 					b=0;
 				}
 			
-			else if ((x_col>=255)&(x_col<512))
+			else if ((x_col>=256)&(x_col<512))
 				{
 					r=0;
 					g=x_col;
@@ -316,89 +322,142 @@ void test_colorBar(void)
 				}
 			else
 				{
-					r=255;
-					g=255;
-					b=255;
+					r=55;
+					g=55;
+					b=55;
 				}
-				
-			color=((r>>3)<<11)|((g>>2)<<5)|((b>>3)<<0);
+			r&=0xf8;g&=0xfc;b&=0xf8;
+			color=(r<<8)|(g<<3)|(b>>3);
 			*p=color;
 
 			}
 
 		}
 	
-}
-
-
-uint16_t bitcolor=0;
-
-void test_moveBar(void)
-{
-	__IO uint16_t  *p;
-	int y,x;
-	uint16_t  color;
-	uint32_t r=0,g=0,b=0;
-
-	int speed;
-
-	p = (uint16_t  *)LCD_COMMAND_ADDR;
-	*p=LCD_COMMAND_COMMENT;
-	LCD_SetCursor(0,0);
-	p = (uint16_t  *)LCD_DATA_ADDR;
-	//_delay_(10);
+#else
 	
-	speed=1;
-	start_x_col=start_x_col<<1;
-	if (start_x_col==0x8000) start_x_col=1;
-	
-	if (bitcolor<15)
+	for(i=0;i<LCD_HEIGHT;i++)
 		{
-				bitcolor++;
-		}
-	else
-		{
-				bitcolor=0;
-		}
-		
-	/*
-	for(y=0;y<20;y++)
-		{
-		for (x=0;x<LCD_WIDTH;x++)
+		color=65535;
+		for (j=0;j<LCD_WIDTH/2;j++)
 			{
-			
-			if ((y>start_x_col)&(y<(start_x_col+100)))	
-				{
-					
-					r=255;
-					g=0;
-					b=0;
-					//*p=x;
-					color=0x5f;
-				}
-
-			else 
-				{
-					//*p=y;
-					
-					r=1;
-					g=0;
-					b=0;
-					//color=(1<<bitcolor);;
-					color=0x23;
-				}
-			
-			color=((r>>3)<<11)|((g>>2)<<5)|(b>>3);
-			//color=0x23;
-			LCD_SetPoint(x, y, color);
-			//*p=color;
-
+				
+				*p=color;
+				color--;
 			}
 
-		}*/
-	LCD_Clear(start_x_col);	
-	//LCD_write_command(0x0020);		
-	//_delay1ms_(50000);
+		}	
+	
+#endif
+
 }
+
+
+void fill_screen(u16 *pData,int width,int height)
+{
+	uint16_t *pobj;
+	int y,x;
+	u16 *psrc;
+	int x_left,x_right,y_top,y_bottom;
+	x_left=start_x;x_right=start_x+width-1;
+	y_top=start_y;y_bottom=start_y+height-1;
+
+	#define default_color 0x55
+
+	pobj = (uint16_t  *)LCD_COMMAND_ADDR;
+	*pobj=LCD_COMMAND_COMMENT;
+	pobj = (uint16_t  *)LCD_DATA_ADDR;
+	psrc=pData;
+
+#if 1
+	
+	for(y=0;y<LCD_HEIGHT;y++)
+		{
+			for (x=0;x<LCD_WIDTH;x++)
+				{
+					if (((x>=x_left)&(x<=x_right))&
+						((y>=y_top)&(y<=y_bottom)))
+						*pobj=*psrc++;
+					else
+						*pobj=default_color;
+				}
+		}	
+	
+#endif
+
+}
+
+
+/*
+双线性插值法
+-------------------------------------------------------------------------------------
+|	p0	|	p1	|	p2	|	p3	|	...		|	p79	|	p80	|	p81	|	...	|	p89	|
+-------------------------------------------------------------------------------------
+|	p90	|	p91	|	p92	|	p93	|	...		|	p159|	p160|	p161|	...	|	p179|
+...
+-------------------------------------------------------------------------------------
+|p76710	|p76711	|p76712	|p76713	|	...		|p76779	|p76780	|p76781	|	...	|p76799	|
+-------------------------------------------------------------------------------------
+
+
+
+		
+	320>X>=0,
+	3>x>=0,
+	320>Y>=0,
+	3>y>=0,
+
+					P(X.x,Y)=p(X,Y)*(3-x)+p(X+1,Y)*x
+	p(X,Y)---------------------P(X.x,Y)-----------p(X+1,Y)
+								|
+								|
+								|		
+							P(X.x,Y.y)=	P(X.x,Y)*(3-y)+P(X+1.x,Y)*y 	
+								|				
+								|
+								|
+	p(X,Y+1)-------------------P(X.x,Y+1)---------------p(X+1,Y+1)							
+					P(X+1.x,Y)=p(X,Y+1)*(3-x)+p(X+1,Y+1)*x
+				
+	
+	P(X.x,Y.y)	=	P(X.x,Y)*(3-y)+P(X+1.x,Y)*y
+				=	(p(X,Y)*(3-x)+p(X+1,Y)*x)*(3-y)+(p(X,Y+1)*(3-x)+p(X+1,Y+1)*x)*y
+
+	//将3->2.66666667
+	
+
+*/
+void fill_screen2(u16 *pData,int width,int height)
+{
+	uint16_t *pobj;
+	int y,x;
+	u16 *psrc;
+	int x_left,x_right,y_top,y_bottom;
+	x_left=start_x;x_right=start_x+width-1;
+	y_top=start_y;y_bottom=start_y+height-1;
+
+	#define default_color 0x55
+
+	pobj = (uint16_t  *)LCD_COMMAND_ADDR;
+	*pobj=LCD_COMMAND_COMMENT;
+	pobj = (uint16_t  *)LCD_DATA_ADDR;
+	psrc=pData;
+
+	//初始化对象:
+	//...
+	
+	for(y=0;y<LCD_HEIGHT;y++)
+		{
+			for (x=0;x<LCD_WIDTH;x++)
+				{
+
+				}
+		}	
+	
+
+
+}
+
+
 #endif
 

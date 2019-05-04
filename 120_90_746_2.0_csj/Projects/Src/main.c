@@ -19,6 +19,8 @@
 #include "I2C.h"
 #include "cLCD.h"
 
+int get_cnt=0;
+int process_cnt=0;
 
 int main(void)
 {
@@ -35,8 +37,10 @@ int main(void)
   while (1)
   {
   		
+  		
 		if(Image_Parameter120.Image_Ready==1) //保证一帧数据的完整性
-		{			
+		{
+
 			 //闭环状态机
 			if(Image_Parameter120.shutter_id!=IDLE)
 			  Image_Parameter120.shutter_id=Shutter_State((unsigned short*)(Image_Parameter120.X_Data),Image_Parameter120.shutter_id,Sensor120_Parameter.Flash_Parameter120.Reg_Data120,Loop_Data120);
@@ -60,6 +64,7 @@ int main(void)
 						Video_Process();	//图像处理//////////////////////
 					  //send////////////
 						Send_Process(Sensor120_Parameter.test_mode);	//根据上位机请求上报不同的图像数据	//////////////////
+						process_cnt++;
 					}						
 				}			 
 				Image_Parameter120.Image_Ready=0;			
@@ -77,11 +82,12 @@ void BSP_CAMERA_FrameEventCallback(void) //DCMI帧中断回调
 		{			
 			 DMA_Copy((uint32_t)(Image_Parameter120.temp_xdata+COLUMN*4),(uint32_t)Image_Parameter120.X_Data,COLUMN*ROW*2);				
 			 Image_Parameter120.Image_Ready=1;
+			 get_cnt++;
 		}
 		
 		LED2_ONOFF();
-	 
-		APP_Tick();	  //获取各温传温度信息	快门控制策略		
+	 	APP_Tick();	  //获取各温传温度信息	快门控制策略		
+		
 }
 
 

@@ -372,7 +372,7 @@ void Sensor_SPI_Init(void)
 
 void FlashSPIInit(void)
 {
-	hspi6.Instance = SPI6;
+	hspi6.Instance = SPI5;	//csj:SPI6->SPI5;
   hspi6.Init.Mode = SPI_MODE_MASTER;
   hspi6.Init.Direction = SPI_DIRECTION_2LINES;
   hspi6.Init.DataSize = SPI_DATASIZE_8BIT;
@@ -452,23 +452,30 @@ void Other_GPIO_Init(void)
 	__HAL_RCC_GPIOE_CLK_ENABLE();
 	__HAL_RCC_DMA2_CLK_ENABLE();
 	__HAL_RCC_GPIOF_CLK_ENABLE();
-	
-	GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull  = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	
-  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+	
+	//csj:hw v0
+	//PD8~13   	  ->	  INT_GPIO0~5	  (PF10~15)
+	GPIO_InitStruct.Mode	= GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull  = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+
+	GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+	
+	//csj:hw v0
+	//SHUTTER_INTA	(PD2)		->		SHUTTER_INTA		(PC0)
+	//SHUTTER_INTA	(PD3)		->		SHUTTER_INTB		(PC1)
+	//DRV8837_SLEEP	(PD6)		->		DRV8837_SLEEP		(PC2)
 	//shutter
-	GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_6;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2;
+  	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_RESET);
 	
-	HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_RESET);	
-	HAL_GPIO_WritePin(GPIOD,GPIO_PIN_3,GPIO_PIN_RESET);	
-	
-	HAL_GPIO_WritePin(GPIOD,GPIO_PIN_6,GPIO_PIN_SET);		
-	
+	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_SET);	
+
 	//LED
 	GPIO_InitStruct.Pin =GPIO_PIN_8|GPIO_PIN_9; 
   	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -481,13 +488,23 @@ void Other_GPIO_Init(void)
   	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOF,GPIO_PIN_6,GPIO_PIN_SET);	
 
-  	//power_en
+  	
+//  	//ON_OFF
+//	GPIO_InitStruct.Pin =GPIO_PIN_0;
+//	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+//	GPIO_InitStruct.Pull = GPIO_PULLUP;
+//	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+//  	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+//	HAL_GPIO_WritePin(GPIOE,GPIO_PIN_0,GPIO_PIN_SET);
+
+	//power_en
 	GPIO_InitStruct.Pin =GPIO_PIN_1;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOE,GPIO_PIN_1,GPIO_PIN_SET);
+	
 
   	//brightness_en
 	GPIO_InitStruct.Pin =GPIO_PIN_5;
@@ -497,11 +514,11 @@ void Other_GPIO_Init(void)
 	
 	//MCO
 	GPIO_InitStruct.Pin       = GPIO_PIN_8;
-  GPIO_InitStruct.Mode      = GPIO_MODE_OUTPUT_PP; 
-  GPIO_InitStruct.Pull      = GPIO_PULLUP;
-  GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	GPIO_InitStruct.Mode      = GPIO_MODE_OUTPUT_PP; 
+	GPIO_InitStruct.Pull      = GPIO_PULLUP;
+	GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	
 	HAL_RCC_MCOConfig(RCC_MCO1,RCC_MCO1SOURCE_PLLCLK,RCC_MCODIV_5);
 	
@@ -606,62 +623,62 @@ void INT_Configuration(uint32_t Val)
 		
 		if(Bits_5==1)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_13,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_15,GPIO_PIN_SET);
 		}
 		
 		else if(Bits_5==0)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_13,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_15,GPIO_PIN_RESET);
 		}
 		
 	  if(Bits_4==1)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_14,GPIO_PIN_SET);
 		}
 		
 		else if(Bits_4==0)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_14,GPIO_PIN_RESET);
 		}
 		
 		if(Bits_3==1)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_11,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_13,GPIO_PIN_SET);
 		}
 		
 		else if(Bits_3==0)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_11,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_13,GPIO_PIN_RESET);
 		}
 				
 		if(Bits_2==1)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_10,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_12,GPIO_PIN_SET);
 		}
 		
 		else if(Bits_2==0)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_10,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_12,GPIO_PIN_RESET);
 		}
 		
 		if(Bits_1==1)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_9,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_11,GPIO_PIN_SET);
 		}
 		
 		else if(Bits_1==0)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_9,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_11,GPIO_PIN_RESET);
 		}
 		
 		if(Bits_0==1)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_8,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_10,GPIO_PIN_SET);
 		}
 		
 		else if(Bits_0==0)
 		{
-			HAL_GPIO_WritePin(GPIOD,GPIO_PIN_8,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF,GPIO_PIN_10,GPIO_PIN_RESET);
 		}
 		
 		BSP_CAMERA_Stop();

@@ -50,24 +50,24 @@
 #define Parma_ADDRESS             ADDR_FLASH_SECTOR_4
 
 
-#define  LED1_ON()               HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_RESET)//led1
-#define  LED1_OFF()              HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_SET)//led1
+//#define  LED1_ON()               HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_RESET)//led1
+//#define  LED1_OFF()              HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_SET)//led1
 
 #define  LED2_ON()               HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_RESET)//led1
 #define  LED2_OFF()              HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_SET)//led1
 #define  LED2_ONOFF()            HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_8)//led1
 
 						 
-#define  SHUTTERON  { HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_SET);\
-											 HAL_GPIO_WritePin(GPIOD,GPIO_PIN_3,GPIO_PIN_RESET);\
+#define  SHUTTERON  { HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);\
+											 HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_RESET);\
 										 }
 						         
-#define  SHUTTEROFF  { HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_RESET);\
-												HAL_GPIO_WritePin(GPIOD,GPIO_PIN_3,GPIO_PIN_SET);\
+#define  SHUTTEROFF  { HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_RESET);\
+												HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_SET);\
 										  }
 
-#define  SHUTTERSTOP  { HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_RESET);\
-												 HAL_GPIO_WritePin(GPIOD,GPIO_PIN_3,GPIO_PIN_RESET);\
+#define  SHUTTERSTOP  { HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_RESET);\
+												 HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_RESET);\
 										  }													
 
 #endif

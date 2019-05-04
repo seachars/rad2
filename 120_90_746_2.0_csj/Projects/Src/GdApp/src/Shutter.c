@@ -3,7 +3,7 @@
 
 void Shutter_Off(void)
 {
-	SHUTTERON;
+	SHUTTEROFF;
 }
 
 void Shutter_Stop(void)
@@ -13,5 +13,5 @@ void Shutter_Stop(void)
 
 void Shutter_On(void)
 {
-	SHUTTEROFF;
+	SHUTTERON;
 }

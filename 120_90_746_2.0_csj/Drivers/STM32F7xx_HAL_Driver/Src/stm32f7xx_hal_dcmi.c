@@ -508,6 +508,7 @@ HAL_StatusTypeDef HAL_DCMI_Resume(DCMI_HandleTypeDef* hdcmi)
   *                the configuration information for the DCMI.
   * @retval None
   */
+ int frame_irg_cnt=0; int V_irg_cnt=0;int H_irg_cnt=0;
 void HAL_DCMI_IRQHandler(DCMI_HandleTypeDef *hdcmi)
 {  
   uint32_t isr_value = READ_REG(hdcmi->Instance->MISR);
@@ -551,6 +552,7 @@ void HAL_DCMI_IRQHandler(DCMI_HandleTypeDef *hdcmi)
   /* Line Interrupt management ************************************************/
   if((isr_value & DCMI_FLAG_LINERI) == DCMI_FLAG_LINERI)
   {
+  	H_irg_cnt++;
     /* Clear the Line interrupt flag */  
     __HAL_DCMI_CLEAR_FLAG(hdcmi, DCMI_FLAG_LINERI);
     
@@ -560,6 +562,7 @@ void HAL_DCMI_IRQHandler(DCMI_HandleTypeDef *hdcmi)
   /* VSYNC interrupt management ***********************************************/
   if((isr_value & DCMI_FLAG_VSYNCRI) == DCMI_FLAG_VSYNCRI)
   {
+  	V_irg_cnt++;
     /* Clear the VSYNC flag */
     __HAL_DCMI_CLEAR_FLAG(hdcmi, DCMI_FLAG_VSYNCRI);
 		
@@ -574,6 +577,7 @@ void HAL_DCMI_IRQHandler(DCMI_HandleTypeDef *hdcmi)
   /* FRAME interrupt management ***********************************************/
   if((isr_value & DCMI_FLAG_FRAMERI) == DCMI_FLAG_FRAMERI)   
   {
+  	frame_irg_cnt++;
     /* When snapshot mode, disable Vsync, Error and Overrun interrupts */
     if((hdcmi->Instance->CR & DCMI_CR_CM) == DCMI_MODE_SNAPSHOT)
     { 
